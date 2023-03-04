@@ -25,6 +25,7 @@ source-repository head
 
 library
   exposed-modules:
+      Latex
       Lib
   other-modules:
       Paths_hiareco
@@ -33,6 +34,7 @@ library
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
   build-depends:
       base >=4.7 && <5
+    , optparse-applicative
     , text
   default-language: Haskell2010
 
@@ -46,6 +48,7 @@ executable hiareco-exe
   build-depends:
       base >=4.7 && <5
     , hiareco
+    , optparse-applicative
     , text
   default-language: Haskell2010
 
@@ -60,5 +63,6 @@ test-suite hiareco-test
   build-depends:
       base >=4.7 && <5
     , hiareco
+    , optparse-applicative
     , text
   default-language: Haskell2010
