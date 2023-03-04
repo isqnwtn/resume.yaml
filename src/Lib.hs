@@ -1,5 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE GADTs #-}
+{-# LANGUAGE RecordWildCards #-}
 module Lib
     ( someFunc
     ) where
@@ -38,7 +39,7 @@ data Obj a = O Text a
 instance (Render a) => Render (Obj a) where
   render (O objName body)
     = unlines
-    [ render (T "end" (EC [objName]) :: Tag Text () (EnclosedList Text))
+    [ render (T "begin" (EC [objName]) :: Tag Text () (EnclosedList Text))
     , render body
     , render (T "end" (EC [objName]) :: Tag Text () (EnclosedList Text))
     ]
@@ -47,7 +48,33 @@ data Document a = D a
 instance (Render a) => Render (Document a) where
   render (D body) = render (O "document" body)
 
+data Latex a = LTX
+  { docclass :: Text
+  , packages :: [Package]
+  , document :: Document a
+  }
+instance (Render a) => Render (Latex a) where
+  render LTX{..} = unlines $
+       [ render $ T ("documentclass"::Text) (EC [docclass])]
+    <> (map render packages)
+    <> [render document]
+
+data Package = PKG
+  { pkgname :: Text
+  , attrib  :: Maybe [Text]
+  }
+instance Render Package where
+  render PKG{..} = case attrib of
+    Nothing -> render $  T ("usepackage"::Text) (EC [pkgname])
+    Just a  -> render $  F ("usepackage"::Text) (ES a) (EC [pkgname])
+
 
 someFunc :: IO ()
 someFunc = putStrLn $ unpack $
-  render $ (D "hello world" :: Document Text)
+  render $ LTX
+  { docclass = "article"::Text
+  ,packages = [ PKG ("graphicx"::Text) Nothing
+              , PKG ("tabularx"::Text) Nothing
+              ]
+  ,document = D ("Hello world"::Text)
+  }
