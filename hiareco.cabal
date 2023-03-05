@@ -25,6 +25,7 @@ source-repository head
 
 library
   exposed-modules:
+      Info
       Latex
       Lib
   other-modules:

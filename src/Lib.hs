@@ -11,7 +11,7 @@ import Latex
 
 data Document a = D a
 instance (Render a) => Render (Document a) where
-  render (D body) = render (O "document" body)
+  render (D body) = render (O (NM ("document" :: Text)) body)
 
 data Latex a = LTX
   { docclass :: Text
