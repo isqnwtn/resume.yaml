@@ -15,11 +15,12 @@ class Modulable a where
 
 data Latex a where
   Empty    :: Latex a
-  (:#>>)   :: (Linable a) => a -> Latex a -> Latex a -- here it should be Latex a -> Latex a -> Latex a
+  LX       :: (Linable a) => a -> Latex a
+  (:#>>)   :: Latex a -> Latex a -> Latex a
   (:<&>)   :: (Modulable a) => a -> Latex a -> Latex a
 
 infixr 8 :#>>
---infix 6 :<&>
+infixr 6 :<&>
 
 data Line a where
   Str     :: a -> Line a
@@ -28,7 +29,17 @@ data Line a where
   Square  :: a -> Line a
   (:<@>)  :: Line a -> Line a -> Line a
 
-infix 5 :<@>
+infixr 5 :<@>
+
+instance Renderable String where
+  rendr = id
+
+instance (Renderable a) => (Renderable (Line a)) where
+  rendr (Str   x) = rendr x
+  rendr (Slash x) = "\\" <> (rendr x)
+  rendr (Curl  x) = "{"<>rendr x<>"}"
+  rendr (Square x) = "["<>rendr x<>"]"
+  rendr ( x :<@> y) = (rendr x)<>(rendr y)
 
 data Ltx where
   Opn :: LtxModOpn -> Ltx
@@ -59,31 +70,19 @@ instance Modulable Ltx where
 
   toMod = toModName
 
-
-instance Renderable String where
-  rendr = id
-
-
-instance (Renderable a) => (Renderable (Line a)) where
-  rendr (Str   x) = rendr x
-  rendr (Slash x) = "\\" <> (rendr x)
-  rendr (Curl  x) = "{"<>rendr x<>"}"
-  rendr (Square x) = "["<>rendr x<>"]"
-  rendr ( x :<@> y) = (rendr x)<>(rendr y)
-
-
 toLines :: Latex a -> [Line String]
 toLines (Empty) = [Str ""]
-toLines (ltxElem :#>> rest) = [linn ltxElem] <> (toLines rest)
-toLines (mod :<&> body) =  [(Slash "begin") :<@> (toMod mod)] <> (toLines body)
-                          <> [(Slash "end"  ) :<@> (toModName mod)]
+toLines (LX e)  = [linn e]
+toLines (i :#>> rest) = (toLines i) <> (toLines rest)
+toLines (modu :<&> body) =  [(Slash "begin") :<@> (toMod modu)] <> (toLines body)
+                          <> [(Slash "end"  ) :<@> (toModName modu)]
 
 test :: IO String
 test = do
-  let bod = (Cld Document) :<&> Empty :: Latex Ltx -- this shoudln'e be Latex Ltx, this should be just Ltx fix this to proceed
-  let li = toLines $ (Opn (DocClass "article"))
-        :#>> (Opn (Package [] "tabularx"))
-        :#>> (Opn (Package [] "graphicx"))
-        :#>> Empty
+  let bod = (Cld Document) :<&> Empty :: Latex Ltx
+  let li = toLines $ LX (Opn (DocClass "article"))
+         :#>> (LX (Opn (Package [] "tabularx")))
+         :#>> (LX (Opn (Package [] "graphicx")))
+         :#>> bod
   let lns = map rendr li
   return $ unlines lns
