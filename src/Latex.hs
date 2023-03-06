@@ -7,10 +7,9 @@
 {-# LANGUAGE DefaultSignatures #-}
 module Latex
   ( Render(..)
-  , Tag(..)
-  , EnclosedList(..)
   , Obj(..)
   , Name(..)
+  , Attribute(..)
   )where
 
 import Prelude hiding (unlines,concat)
@@ -37,9 +36,13 @@ instance (Render a,Render b,Render c) => Render (Tag a b c) where
 class Attribute a where
   attrib:: a -> (Text,[Text],[Text])
 
-data Name a = NM a
-instance (Render a) => Attribute (Name a) where
+data Name = NM Text
+            | NMCU Text [Text]
+            | NMALL Text [Text] [Text]
+instance Attribute Name where
   attrib (NM a) = (render a,[],[])
+  attrib (NMCU a b) = (render a,[],b)
+  attrib (NMALL a s c) = (render a,s,c)
 
 
 data EnclosedList a = EC [a]
@@ -52,10 +55,11 @@ instance (Render a) => Render (EnclosedList a) where
     then ""
     else "[" <> ( intercalate "," (map render l)  ) <> "]"
 
-data Obj a b where
+data Obj a b where -- ^ a - attribute , b - body
   O  :: a -> b -> Obj a b
   OS :: a -> Obj a ()
   CON :: (Obj a b) -> (Obj a b) -> (Obj a b)
+  EO  :: Obj a b
 instance (Attribute a, Render b) => Render (Obj a b) where
   render (O attr body)
     = unlines
@@ -70,3 +74,12 @@ instance (Attribute a, Render b) => Render (Obj a b) where
     where
       (oname,_,curlstuff) = attrib attr
   render (CON obj1 obj2) = unlines $ [render obj1, render obj2]
+  render (EO) = ""
+
+instance Semigroup (Obj a b) where
+  x <> y = CON x y
+
+instance Monoid (Obj a b) where
+  mempty = EO
+  mconcat [] = EO
+  mconcat (x:xs) = CON x (mconcat xs)

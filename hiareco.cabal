@@ -28,6 +28,7 @@ library
       Info
       Latex
       Lib
+      Ltx
   other-modules:
       Paths_hiareco
   hs-source-dirs:
