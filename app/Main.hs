@@ -29,7 +29,7 @@ main = do
   latex <- someFunc
   args <- execParser opts
   texFile <- openFile (outFile args) WriteMode
-  let latexString = unpack latex
+  let latexString = latex
   hPutStrLn texFile latexString
   hClose texFile
   putStrLn latexString

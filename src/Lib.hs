@@ -1,50 +1,54 @@
-{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE GADTs #-}
-{-# LANGUAGE RecordWildCards #-}
-{-# LANGUAGE RebindableSyntax #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
+
 module Lib
     ( someFunc
     ) where
 
-import Prelude hiding (unlines,concat)
-import Data.Text hiding (map)
-import Data.String (fromString)
 import Latex
 
-class (Render b,Attribute a) => LatexObj a b  where
-  toObj :: (a,b) -> Obj a b
+data Ltx where
+  Opn :: LtxModOpn -> Ltx
+  Cld :: LtxModCld -> Ltx
 
-data Document a = D a
-instance (Render a) => Render (Document a) where
-  render (D body) = render (O (NM ("document")) body)
+data LtxModOpn
+  = DocClass String
+  | Package [String] String
+  | DefineColor String (Float,Float,Float)
+  | SingleLineElement String
+data LtxModCld
+  = Document
+  | ColorBox String
+  | MiniPage [String]
+  | Tabularx [String]
 
-data Latex a = LTX
-  { docclass :: Text
-  , packages :: [Package]
-  , document :: Document a
-  }
-instance (Render a) => Render (Latex a) where
-  render LTX{..} = unlines $
-       [ render $ OS (NMCU "documentclass" ["article"])]
-    <> (map render packages)
-    <> [render document]
+instance Linable Ltx where
+  linn (Opn (DocClass x)) = Slash "documentclass" :<@> Curl x
+  linn (Opn (Package attr pkg)) = Slash "usepackage" :<@> Curl pkg
+  linn (Opn (SingleLineElement x)) = Slash x
+  linn _ = Str ""
 
-data Package = PKG
-  { pkgname :: Text
-  , attrib  :: Maybe [Text]
-  }
-instance Render Package where
-  render PKG{..} = case attrib of
-    Nothing -> render $  OS (NMCU "usepackage" [pkgname])
-    Just a  -> render $  OS (NMALL "usepackage" a [pkgname])
+instance Modulable Ltx where
+  toModName (Cld Document) = Curl "document"
+  toModName (Cld (MiniPage _)) = Curl "minipage"
+  toModName (Cld (Tabularx _)) = Curl "tabularx"
+  toModName _ = Str ""
 
-someFunc :: IO Text
-someFunc = return $
-  render $ LTX
-  { docclass = "article"::Text
-  ,packages = [ PKG "graphicx" Nothing
-              , PKG "tabularx" Nothing
-              ]
-  ,document = D ("Hello world"::Text)
-  }
+  toMod = toModName
+
+toLines :: Latex a -> [Line String]
+toLines (Empty) = [Str ""]
+toLines (LX e)  = [linn e]
+toLines (i :#>> rest) = (toLines i) <> (toLines rest)
+toLines (modu :<&> body) =  [(Slash "begin") :<@> (toMod modu)] <> (toLines body)
+                          <> [(Slash "end"  ) :<@> (toModName modu)]
+
+someFunc :: IO String
+someFunc = do
+  let tab = (Cld (Tabularx ["table"])) :<&> Empty
+  let bod = (Cld Document) :<&> tab :: Latex Ltx
+  let li = toLines $ LX (Opn (DocClass "article"))
+        :#>> (LX (Opn (Package [] "tabularx")))
+        :#>> (LX (Opn (Package [] "graphicx")))
+        :#>> bod
+  let lns = map render li
+  return $ unlines lns
