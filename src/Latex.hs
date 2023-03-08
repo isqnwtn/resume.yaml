@@ -25,9 +25,11 @@ data Latex a where
   LX       :: (Linable a) => a -> Latex a
   (:#>>)   :: Latex a -> Latex a -> Latex a
   (:<&>)   :: (Modulable a) => a -> Latex a -> Latex a
+  (:<^>)   :: (Modulable a) => a -> Latex a -> Latex a
 
 infixr 8 :#>>
 infixr 6 :<&>
+infixr 5 :<^>
 
 data Line a where
   Str     :: a -> Line a

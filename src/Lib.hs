@@ -1,10 +1,16 @@
 {-# LANGUAGE GADTs #-}
 
 module Lib
-    ( someFunc
-    ) where
+  ( Ltx(..)
+  , LtxModOpn(..)
+  , LtxModCld(..)
+  , Linable(..)
+  , Modulable(..)
+  , toLines
+  ) where
 
 import Latex
+import Data.List (intercalate)
 
 data Ltx where
   Opn :: LtxModOpn -> Ltx
@@ -17,15 +23,19 @@ data LtxModOpn
   | SingleLineElement String
 data LtxModCld
   = Document
-  | ColorBox String
-  | MiniPage [String]
-  | Tabularx [String]
+  | ColorBox (Line String)
+  | MiniPage (Line String)
+  | Tabularx (Line String)
 
 instance Linable Ltx where
   linn (Opn (DocClass x)) = Slash "documentclass" :<@> Curl x
   linn (Opn (Package attr pkg)) = Slash "usepackage" :<@> Curl pkg
   linn (Opn (SingleLineElement x)) = Slash x
+  linn (Opn (DefineColor col (r,g,b)))
+    = Slash "definecolor" :<@> Curl col :<@> Curl "rgb"
+    :<@> Curl ("("<>intercalate "," [show r,show g,show b] <>")")
   linn _ = Str ""
+
 
 instance Modulable Ltx where
   toModName (Cld Document) = Curl "document"
@@ -33,7 +43,12 @@ instance Modulable Ltx where
   toModName (Cld (Tabularx _)) = Curl "tabularx"
   toModName _ = Str ""
 
-  toMod = toModName
+  toMod (Cld Document) = Curl "document"
+  toMod (Cld (MiniPage _)) = Curl "minipage"
+  toMod (Cld (Tabularx _)) = Curl "tabularx"
+  toMod (Cld (ColorBox attr)) = Str "colorbox" :<@> attr
+  toMod _ = Str ""
+
 
 toLines :: Latex a -> [Line String]
 toLines (Empty) = [Str ""]
@@ -41,14 +56,6 @@ toLines (LX e)  = [linn e]
 toLines (i :#>> rest) = (toLines i) <> (toLines rest)
 toLines (modu :<&> body) =  [(Slash "begin") :<@> (toMod modu)] <> (toLines body)
                           <> [(Slash "end"  ) :<@> (toModName modu)]
-
-someFunc :: IO String
-someFunc = do
-  let tab = (Cld (Tabularx ["table"])) :<&> Empty
-  let bod = (Cld Document) :<&> tab :: Latex Ltx
-  let li = toLines $ LX (Opn (DocClass "article"))
-        :#>> (LX (Opn (Package [] "tabularx")))
-        :#>> (LX (Opn (Package [] "graphicx")))
-        :#>> bod
-  let lns = map render li
-  return $ unlines lns
+toLines (modu :<^> body) = [(Slash "") :<@> (toMod modu) :<@> Str "{%"]
+                        <> (toLines body)
+                        <> [Str "}%"]

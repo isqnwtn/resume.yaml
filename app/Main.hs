@@ -1,6 +1,6 @@
 module Main (main) where
 
-import Lib
+import LatexGen
 import Data.Text (unpack)
 import System.IO
 import Options.Applicative

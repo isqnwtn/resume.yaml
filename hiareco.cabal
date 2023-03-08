@@ -27,6 +27,7 @@ library
   exposed-modules:
       Info
       Latex
+      LatexGen
       Lib
   other-modules:
       Paths_hiareco
