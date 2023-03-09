@@ -9,32 +9,59 @@ import Lib
 
 someFunc :: IO String
 someFunc = do
-  let bod = (Cld Document) :<&> ( header :#>> resumeBody) :: Latex Ltx
+  let body = (Cld Document) :<&> ( header :#>> resumeBody) :: Latex Ltx
   let li = toLines $ LX (Opn (DocClass "article"))
-        :#>> (LX (Opn (Package [] "graphicx")))
-        :#>> (LX (Opn (Package ["a4paper","margin=0in"] "geometry")))
-        :#>> (LX (Opn (Package ["svgnames","table"] "xcolor")))
-        :#>> (LX (Opn (Package [] "tabularx")))
-        :#>> bod
+        :#>> pkg [] "graphicx"
+        :#>> pkg ["a4paper","margin=0in"] "geometry"
+        :#>> pkg ["svgnames","table"] "xcolor"
+        :#>> pkg [] "tabularx"
+        :#>> body
   let lns = map render li
   return $ unlines lns
 
 resumeBody :: Latex Ltx
 resumeBody =
-  let tab = (Cld (Tabularx (Str "table"))) :<&> Empty
-  in (Empty)
+  let tab = ( Cld $ Tabularx $ Curl "\\linewidth" :<@> tabattr ) :<&> tableBody
+
+      tabhsize :: Double -> String
+      tabhsize x = render $ Curl $ render $ Slash "hsize" :<@> Str ("="<>show x) :<@> Slash "hsize"
+
+      tabattr = Curl $ "|>" <> tabhsize 1.0 <> "X|>" <> tabhsize 1.0 <> "X|"
+
+      lenset = (sle $ Slash "setlength" :<@> Curl "\\extrarowheight" :<@> Curl "2pt")
+          :#>> (sle $ Slash "setlength" :<@> Curl "\\arrayrulewidth" :<@> Curl "10pt")
+      arrayrulecolor = sle $ Slash "arrayrulecolor" :<@> Curl "white"
+      noindent = sle $ Slash "noindent"
+  in (noindent :#>> lenset :#>> arrayrulecolor :#>> tab)
+
+tableBody :: Latex Ltx
+tableBody = (sle $ Str "meow")
+       :#>> (sle $ Str "&")
+       :#>> (sle $ Str "meow meow")
+       :#>> Empty
 
 header :: Latex Ltx
 header =
   let defcol = LX (Opn (DefineColor "lightRed" (1.0,0.85,0.9)))
-      noindent = LX (Opn (SLE $ Slash "noindent"))
+      noindent = sle $ Slash "noindent"
       minipage
         = (Cld (MiniPage (Curl "1.0\\textwidth")))
-        :<&> (   (LX $ Opn $ SLE $ Slash "vspace" :<@> Curl "2cm" )
-            :#>> (LX $ Opn $ SLE $ Slash "Huge")
-            :#>> (LX $ Opn $ SLE $ Slash "centering")
-            :#>> (LX $ Opn $ SLE $ Str "Name name")
-            :#>> (LX $ Opn $ SLE $ Slash "rule" :<@> Curl "\\linewidth" :<@> Curl "1pt")
+        :<&> (   (sle $ Slash "vspace" :<@> Curl "2cm" )
+            :#>> (sle $ Slash "Huge")
+            :#>> (sle $ Slash "centering")
+            :#>> (sle $ Str "Name name")
+            :#>> (sle $ Slash "rule" :<@> Curl "\\linewidth" :<@> Curl "1pt")
             )
       colbox = (Cld (ColorBox (Curl "lightRed"))) :<^> minipage
    in (defcol :#>> noindent :#>> colbox)
+
+
+-- Helper functions
+
+-- create single line latex element
+sle :: Line String -> Latex Ltx
+sle a = LX $ Opn $ SLE a
+
+-- create package
+pkg :: [String] -> String -> Latex Ltx
+pkg attr pname = LX $ Opn $ Package attr pname

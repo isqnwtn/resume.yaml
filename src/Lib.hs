@@ -50,7 +50,7 @@ instance Modulable Ltx where
 
   toMod (Cld Document) = Curl "document"
   toMod (Cld (MiniPage attr)) = Curl "minipage" :<@> attr
-  toMod (Cld (Tabularx _)) = Curl "tabularx"
+  toMod (Cld (Tabularx attr)) = Curl "tabularx" :<@> attr
   toMod (Cld (ColorBox attr)) = Str "colorbox" :<@> attr
   toMod _ = Str ""
 
