@@ -20,7 +20,7 @@ data LtxModOpn
   = DocClass String
   | Package [String] String
   | DefineColor String (Float,Float,Float)
-  | SingleLineElement String
+  | SLE (Line String)
 data LtxModCld
   = Document
   | ColorBox (Line String)
@@ -29,11 +29,16 @@ data LtxModCld
 
 instance Linable Ltx where
   linn (Opn (DocClass x)) = Slash "documentclass" :<@> Curl x
-  linn (Opn (Package attr pkg)) = Slash "usepackage" :<@> Curl pkg
-  linn (Opn (SingleLineElement x)) = Slash x
+  linn (Opn (Package attr pkg)) =
+    if (not . null) attr then
+      Slash "usepackage"
+      :<@> Square (intercalate "," attr):<@> Curl pkg
+    else
+      Slash "usepackage" :<@> Curl pkg
+  linn (Opn (SLE x)) = x
   linn (Opn (DefineColor col (r,g,b)))
     = Slash "definecolor" :<@> Curl col :<@> Curl "rgb"
-    :<@> Curl ("("<>intercalate "," [show r,show g,show b] <>")")
+    :<@> Curl (intercalate "," [show r,show g,show b])
   linn _ = Str ""
 
 
@@ -44,7 +49,7 @@ instance Modulable Ltx where
   toModName _ = Str ""
 
   toMod (Cld Document) = Curl "document"
-  toMod (Cld (MiniPage _)) = Curl "minipage"
+  toMod (Cld (MiniPage attr)) = Curl "minipage" :<@> attr
   toMod (Cld (Tabularx _)) = Curl "tabularx"
   toMod (Cld (ColorBox attr)) = Str "colorbox" :<@> attr
   toMod _ = Str ""
