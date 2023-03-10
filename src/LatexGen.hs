@@ -1,4 +1,3 @@
--- |
 
 module LatexGen
  (someFunc)
@@ -35,10 +34,16 @@ resumeBody =
   in (noindent :#>> lenset :#>> arrayrulecolor :#>> tab)
 
 tableBody :: Latex Ltx
-tableBody = (sle $ Str "meow")
+tableBody = workExp
        :#>> (sle $ Str "&")
        :#>> (sle $ Str "meow meow")
        :#>> Empty
+
+workExp :: Latex Ltx
+workExp =
+  let x = 3
+  in (sle $ Slash "hline")
+     :#>> (sle $ Slash "section*" :<@> Curl "Work Experience")
 
 header :: Latex Ltx
 header =
@@ -46,11 +51,11 @@ header =
       noindent = sle $ Slash "noindent"
       minipage
         = (Cld (MiniPage (Curl "1.0\\textwidth")))
-        :<&> (   (sle $ Slash "vspace" :<@> Curl "2cm" )
+        :<&> (   (sle $ Slash "vspace" :<@> Curl "0.5cm" )
             :#>> (sle $ Slash "Huge")
-            :#>> (sle $ Slash "centering")
             :#>> (sle $ Str "Name name")
-            :#>> (sle $ Slash "rule" :<@> Curl "\\linewidth" :<@> Curl "1pt")
+            -- :#>> (sle $ Slash "rule" :<@> Curl "\\linewidth" :<@> Curl "4pt")
+            :#>> (sle $ Slash "vspace" :<@> Curl "1cm")
             )
       colbox = (Cld (ColorBox (Curl "lightRed"))) :<^> minipage
    in (defcol :#>> noindent :#>> colbox)

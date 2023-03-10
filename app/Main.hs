@@ -1,13 +1,15 @@
 module Main (main) where
 
 import LatexGen
+import Info
 import Data.Text (unpack)
 import System.IO
 import Options.Applicative
+import Data.Yaml (decodeFileEither, ParseException)
 
 data Arguments = Arguments
   { outFile :: String
-  , display :: Bool
+  , inFile :: String
   }
 
 argParser :: Parser Arguments
@@ -18,20 +20,25 @@ argParser = Arguments
     <> metavar "OUTPUT"
     <> help "output file"
     )
-  <*> switch
-    ( long "display"
-    <> short 'd'
-    <> help "whether to display the output in terminal"
+  <*> strOption
+    ( long "input-file"
+    <> short 'i'
+    <> help "input file"
     )
 
 main :: IO ()
 main = do
-  latex <- someFunc
   args <- execParser opts
+
+  yamlFile <- decodeFileEither (inFile args) :: IO (Either ParseException Resume)
+  print yamlFile
+
   texFile <- openFile (outFile args) WriteMode
+  latex <- someFunc
   let latexString = latex
   hPutStrLn texFile latexString
   hClose texFile
+
   putStrLn latexString
     where
       opts = info (argParser <**> helper)
