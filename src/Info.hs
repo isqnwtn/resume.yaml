@@ -30,7 +30,7 @@ data PersonalInfo = PersonalInfo
 
 instance FromJSON PersonalInfo
 
-data Experience = Exp
+data Experience = Experience
   { duration :: Maybe (Duration Text)
   , title    :: Text
   , achievements :: [Text]

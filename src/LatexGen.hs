@@ -1,14 +1,16 @@
-
+{-# LANGUAGE RecordWildCards #-}
 module LatexGen
  (someFunc)
 where
 
 import Latex
+import Info
 import Lib
+import Data.Text (unpack)
 
-someFunc :: IO String
-someFunc = do
-  let body = (Cld Document) :<&> ( header :#>> resumeBody) :: Latex Ltx
+someFunc :: Resume -> IO String
+someFunc resume@Resume{..} = do
+  let body = (Cld Document) :<&> ( (header personalInfo) :#>> resumeBody resume) :: Latex Ltx
   let li = toLines $ LX (Opn (DocClass "article"))
         :#>> pkg [] "graphicx"
         :#>> pkg ["a4paper","margin=0in"] "geometry"
@@ -18,9 +20,9 @@ someFunc = do
   let lns = map render li
   return $ unlines lns
 
-resumeBody :: Latex Ltx
-resumeBody =
-  let tab = ( Cld $ Tabularx $ Curl "\\linewidth" :<@> tabattr ) :<&> tableBody
+resumeBody :: Resume -> Latex Ltx
+resumeBody rsm@Resume{..} =
+  let tab = ( Cld $ Tabularx $ Curl "\\linewidth" :<@> tabattr ) :<&> tableBody rsm
 
       tabhsize :: Double -> String
       tabhsize x = render $ Curl $ render $ Slash "hsize" :<@> Str ("="<>show x) :<@> Slash "hsize"
@@ -33,27 +35,36 @@ resumeBody =
       noindent = sle $ Slash "noindent"
   in (noindent :#>> lenset :#>> arrayrulecolor :#>> tab)
 
-tableBody :: Latex Ltx
-tableBody = workExp
+tableBody :: Resume -> Latex Ltx
+tableBody Resume{..} = workExp workExperience
        :#>> (sle $ Str "&")
        :#>> (sle $ Str "meow meow")
        :#>> Empty
 
-workExp :: Latex Ltx
-workExp =
-  let x = 3
+workExp :: [Experience] -> Latex Ltx
+workExp expirience =
+  let expContent e@Experience{..} = sle $ Str $ unpack title
+      singleExp e@Experience{..}
+        = (sle $ Str $ "% begin exp" <> unpack title)
+        :#>> (sle $ Slash "subsection*" :<@> (Curl $ unpack title))
+        :#>> (Cld (InCurl (Str "textcolor" :<@> Curl "gray"))
+              :<^> (Cld (BegEnd "slshape" ELine) ) :<&> (expContent e)
+             )
+        :#>> (sle $ Str $ "% end exp" <> unpack title)
+
   in (sle $ Slash "hline")
      :#>> (sle $ Slash "section*" :<@> Curl "Work Experience")
+     :#>> (concatLtx $ map singleExp expirience)
 
-header :: Latex Ltx
-header =
+header :: PersonalInfo -> Latex Ltx
+header PersonalInfo{..} =
   let defcol = LX (Opn (DefineColor "lightRed" (1.0,0.85,0.9)))
       noindent = sle $ Slash "noindent"
       minipage
         = (Cld (MiniPage (Curl "1.0\\textwidth")))
         :<&> (   (sle $ Slash "vspace" :<@> Curl "0.5cm" )
             :#>> (sle $ Slash "Huge")
-            :#>> (sle $ Str "Name name")
+            :#>> (sle $ Str $ unpack name)
             -- :#>> (sle $ Slash "rule" :<@> Curl "\\linewidth" :<@> Curl "4pt")
             :#>> (sle $ Slash "vspace" :<@> Curl "1cm")
             )
@@ -70,3 +81,7 @@ sle a = LX $ Opn $ SLE a
 -- create package
 pkg :: [String] -> String -> Latex Ltx
 pkg attr pname = LX $ Opn $ Package attr pname
+
+concatLtx :: [Latex a] -> Latex a
+concatLtx (x:xs) = x :#>> (concatLtx xs)
+concatLtx [] = Empty

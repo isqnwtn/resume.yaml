@@ -30,16 +30,19 @@ main :: IO ()
 main = do
   args <- execParser opts
 
-  yamlFile <- decodeFileEither (inFile args) :: IO (Either ParseException Resume)
-  print yamlFile
+  resumeData <- decodeFileEither (inFile args) :: IO (Either ParseException Resume)
+  print resumeData
 
-  texFile <- openFile (outFile args) WriteMode
-  latex <- someFunc
-  let latexString = latex
-  hPutStrLn texFile latexString
-  hClose texFile
-
-  putStrLn latexString
+  case resumeData of
+    Left err -> do
+      print err
+    Right rsm -> do
+      texFile <- openFile (outFile args) WriteMode
+      latex <- someFunc rsm
+      let latexString = latex
+      hPutStrLn texFile latexString
+      hClose texFile
+      putStrLn latexString
     where
       opts = info (argParser <**> helper)
         ( fullDesc

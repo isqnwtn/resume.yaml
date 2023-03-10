@@ -32,6 +32,7 @@ infixr 6 :<&>
 infixr 5 :<^>
 
 data Line a where
+  ELine   :: Line a
   Str     :: a -> Line a
   Slash   :: a -> Line a
   Curl    :: a -> Line a
@@ -44,6 +45,7 @@ instance Render String where
   render = id
 
 instance (Render a) => (Render (Line a)) where
+  render ELine     = ""
   render (Str   x) = render x
   render (Slash x) = "\\" <> (render x)
   render (Curl  x) = "{"<>render x<>"}"
