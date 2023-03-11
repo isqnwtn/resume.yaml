@@ -1,9 +1,11 @@
 personalInfo:
     name: "John Doe"
-    position: "Somehwere lmao"
+    title: "Somehwere lmao"
     description: "John is trying hard to make this project work"
 workExperience:
-    - title: "Worker"
+    - spec:
+        workPlaceName: NASA
+        position: rocket scientist
       duration:
         startDate: "10-02-2022"
         endDate: "11-02-2022"
@@ -12,10 +14,14 @@ workExperience:
         - "did that"
         - "tbh did nothing"
 projects:
-    - title: "Resumeow"
+    - spec:
+        projectName: "Resumeow"
+        projectLanguage: "Haskell"
       achievements:
       - "this project lmao"
 education:
-    - title: "IIT hell"
+    - spec:
+        universityName: "IIT"
+        universityPlace: "Hell"
       achievements:
         - "ruined mental health"

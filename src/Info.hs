@@ -1,11 +1,15 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE FlexibleInstances #-}
 
 module Info
   ( Resume(..)
   , PersonalInfo(..)
   , Experience(..)
   , Duration(..)
+  , Work(..)
+  , Education(..)
+  , Project(..)
   )
 where
 
@@ -15,28 +19,30 @@ import GHC.Generics
 
 data Resume = Resume
   { personalInfo :: PersonalInfo
-  , workExperience :: [Experience]
-  , projects :: [Experience]
-  , education :: [Experience]
+  , workExperience :: [Experience Work]
+  , projects :: [Experience Project]
+  , education :: [Experience Education]
   } deriving (Show,Generic)
 
 instance FromJSON Resume
 
 data PersonalInfo = PersonalInfo
   { name :: Text
-  , position :: Text
+  , title :: Text
   , description :: Text
   } deriving (Show, Generic)
 
 instance FromJSON PersonalInfo
 
-data Experience = Experience
+data Experience a = Experience
   { duration :: Maybe (Duration Text)
-  , title    :: Text
+  , spec    :: a
   , achievements :: [Text]
   } deriving (Show, Generic)
 
-instance FromJSON Experience
+instance FromJSON (Experience Work)
+instance FromJSON (Experience Education)
+instance FromJSON (Experience Project)
 
 data Duration a = Duration
   { startDate :: a
@@ -49,3 +55,23 @@ instance (FromJSON a) => FromJSON (Duration a) where
     endDate   <- v .:? "endDate"
     return (Duration startDate endDate)
   parseJSON _ = mempty
+
+data Work = Work
+  { workPlaceName :: Text
+  , position      :: Text
+  } deriving (Show, Generic)
+
+instance FromJSON Work
+
+data Education = Education
+  { universityName :: Text
+  , universityPlace :: Text
+  } deriving (Show, Generic)
+
+instance FromJSON Education
+
+data Project = Project
+  { projectName :: Text
+  , projectLanguage :: Text
+  } deriving (Show, Generic)
+instance FromJSON Project

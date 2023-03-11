@@ -41,16 +41,16 @@ tableBody Resume{..} = workExp workExperience
        :#>> (sle $ Str "meow meow")
        :#>> Empty
 
-workExp :: [Experience] -> Latex Ltx
+workExp :: [Experience Work] -> Latex Ltx
 workExp expirience =
-  let expContent e@Experience{..} = sle $ Str $ unpack title
+  let expContent e@Experience{..} = sle $ Str $ unpack $ position spec
       singleExp e@Experience{..}
-        = (sle $ Str $ "% begin exp" <> unpack title)
-        :#>> (sle $ Slash "subsection*" :<@> (Curl $ unpack title))
+        = (sle $ Str $ "% begin exp" <> (unpack $ workPlaceName spec))
+        :#>> (sle $ Slash "subsection*" :<@> (Curl $ unpack $ workPlaceName spec))
         :#>> (Cld (InCurl (Str "textcolor" :<@> Curl "gray"))
               :<^> (Cld (BegEnd "slshape" ELine) ) :<&> (expContent e)
              )
-        :#>> (sle $ Str $ "% end exp" <> unpack title)
+        :#>> (sle $ Str $ "% end exp" <> (unpack $ position spec))
 
   in (sle $ Slash "hline")
      :#>> (sle $ Slash "section*" :<@> Curl "Work Experience")
