@@ -28,6 +28,7 @@ library
       Gen.Body
       Gen.Common
       Gen.Gen
+      Gen.Work
       Info
       Latex
       Lib
