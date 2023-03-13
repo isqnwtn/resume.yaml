@@ -25,9 +25,11 @@ source-repository head
 
 library
   exposed-modules:
+      Gen.Body
+      Gen.Common
+      Gen.Gen
       Info
       Latex
-      LatexGen
       Lib
   other-modules:
       Paths_hiareco

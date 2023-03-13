@@ -58,6 +58,7 @@ instance (FromJSON a) => FromJSON (Duration a) where
 
 data Work = Work
   { workPlaceName :: Text
+  , workLocation  :: Text
   , position      :: Text
   } deriving (Show, Generic)
 

@@ -4,8 +4,9 @@ personalInfo:
     description: "John is trying hard to make this project work"
 workExperience:
     - spec:
-        workPlaceName: NASA
-        position: rocket scientist
+        workPlaceName: Indian Space Research Organization
+        workLocation: Earth
+        position: Rocket scientist
       duration:
         startDate: "10-02-2022"
         endDate: "11-02-2022"
@@ -13,6 +14,28 @@ workExperience:
         - "did this"
         - "did that"
         - "tbh did nothing"
+    - spec:
+        workPlaceName: Aperture Laborotory
+        workLocation: Valve
+        position: Environment Tester
+      duration:
+        startDate: "10-01-2021"
+        endDate: "11-01-2022"
+      achievements:
+        - "did testing with apperture laborotory environment"
+        - "tested and verified working of portal gun"
+        - "made a portal in the moon"
+    - spec:
+        workPlaceName: Umbrella corporation
+        workLocation: Hell
+        position: Mutant Observation Intern
+      duration:
+        startDate: "21-04-2019"
+        endDate: "25-08-2019"
+      achievements:
+        - "observed behaviour of mutants under different conditions, as well as monitoring and noting the differences along side the introduction of different chemicals"
+        - "discovered serums that convert people into mutants"
+        - "didn't die"
 projects:
     - spec:
         projectName: "Resumeow"
