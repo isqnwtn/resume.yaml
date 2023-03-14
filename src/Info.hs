@@ -13,7 +13,8 @@ module Info
   )
 where
 
-import Data.Text
+import Data.Text (Text,pack)
+import Data.List.Split
 import Data.Yaml
 import GHC.Generics
 
@@ -22,9 +23,21 @@ data Resume = Resume
   , workExperience :: [Experience Work]
   , projects :: [Experience Project]
   , education :: [Experience Education]
+  , skills :: [(Text,Int)]
   } deriving (Show,Generic)
 
-instance FromJSON Resume
+instance FromJSON Resume where
+  parseJSON (Object v) = do
+    pI <- v .: "personalInfo"
+    wE <- v .: "workExperience"
+    prj <- v .: "projects"
+    edu <- v .: "education"
+    sk <- v .: "skills"
+    return $ Resume pI wE prj edu (convertSkills sk)
+      where
+        splitIt s = (\x -> ( pack $ head x, read $ head $ tail x)) (splitOn "@" s)
+        convertSkills ls = map splitIt ls
+  parseJSON _ = mempty
 
 data PersonalInfo = PersonalInfo
   { name :: Text

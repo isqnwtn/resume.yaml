@@ -4,18 +4,18 @@ personalInfo:
     description: "John is trying hard to make this project work, this project started out cause john thought it'd be rather easier to write this in haskell without using any third party librariese, but turns out latex is such a pain in the ass so it' basically taking forever to finish, John really hope he can finish it soon"
 workExperience:
     - spec:
-        workPlaceName: Indian Space Research Organization
+        workPlaceName: Abstergo Industries
         workLocation: Earth
-        position: Rocket scientist
+        position: Senior History Mainpulator
       duration:
         startDate: "Feb-2022"
         endDate: "March-2022"
       achievements:
-        - "did this"
-        - "did that"
-        - "tbh did nothing"
+        - "examined timelines to look into life of assassins"
+        - "altered timeslines to produce different effectss"
+        - "discovered city of atlantis"
     - spec:
-        workPlaceName: Aperture Laborotory
+        workPlaceName: Aperture Science Incorporated
         workLocation: Valve
         position: Environment Tester
       duration:
@@ -48,3 +48,8 @@ education:
         universityPlace: "Hell"
       achievements:
         - "ruined mental health"
+skills:
+    - animus @ 3
+    - fighting @ 5
+    - chemicals @ 4
+    - being alive @ 1

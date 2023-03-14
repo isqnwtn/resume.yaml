@@ -24,6 +24,7 @@ dependencies:
 - text
 - optparse-applicative
 - yaml
+- split
 
 ghc-options:
 - -Wall

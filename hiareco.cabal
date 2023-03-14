@@ -28,6 +28,7 @@ library
       Gen.Body
       Gen.Common
       Gen.Gen
+      Gen.Skills
       Gen.Work
       Info
       Latex
@@ -40,6 +41,7 @@ library
   build-depends:
       base >=4.7 && <5
     , optparse-applicative
+    , split
     , text
     , yaml
   default-language: Haskell2010
@@ -55,6 +57,7 @@ executable hiareco-exe
       base >=4.7 && <5
     , hiareco
     , optparse-applicative
+    , split
     , text
     , yaml
   default-language: Haskell2010
@@ -71,6 +74,7 @@ test-suite hiareco-test
       base >=4.7 && <5
     , hiareco
     , optparse-applicative
+    , split
     , text
     , yaml
   default-language: Haskell2010
