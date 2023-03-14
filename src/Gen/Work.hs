@@ -30,7 +30,7 @@ expContent e@Experience{..}
         Just (Duration s (Just end)) ->
           (sle $ Str (unpack s <> " $\\Rightarrow$ " <> unpack end))
           :#>> (sle $ Slash "hfill")
-          :#>> (sle $ Str $ unpack $ workPlaceName spec)
+          :#>> (sle $ Str $ unpack $ workLocation spec)
 
 achievementsList :: [Text] -> Latex Ltx
 achievementsList l
