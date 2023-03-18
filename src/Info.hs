@@ -43,6 +43,12 @@ data PersonalInfo = PersonalInfo
   { name :: Text
   , title :: Text
   , description :: Text
+
+  , phoneNum :: Text
+  , email :: Text
+  , location :: Text
+  , website :: Text
+  , github :: Text
   } deriving (Show, Generic)
 
 instance FromJSON PersonalInfo

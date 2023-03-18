@@ -2,6 +2,11 @@ personalInfo:
     name: "John Doe"
     title: "Somehwere lmao"
     description: "John is trying hard to make this project work, this project started out cause john thought it'd be rather easier to write this in haskell without using any third party librariese, but turns out latex is such a pain in the ass so it' basically taking forever to finish, John really hope he can finish it soon"
+    phoneNum: "+123-420-69"
+    email: "john@doe.com"
+    location: "mars"
+    website: "www.john.doe"
+    github: "github/joooohn"
 workExperience:
     - spec:
         workPlaceName: Abstergo Industries
