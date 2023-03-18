@@ -22,7 +22,7 @@ data Resume = Resume
   { personalInfo :: PersonalInfo
   , workExperience :: [Experience Work]
   , projects :: [Experience Project]
-  , education :: [Experience Education]
+  , educationInfo :: [Experience Education]
   , skills :: [(Text,Int)]
   } deriving (Show,Generic)
 
@@ -80,6 +80,8 @@ instance FromJSON Work
 data Education = Education
   { universityName :: Text
   , universityPlace :: Text
+  , degreeName :: Text
+  , cgpa :: Float
   } deriving (Show, Generic)
 
 instance FromJSON Education

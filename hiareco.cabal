@@ -27,6 +27,7 @@ library
   exposed-modules:
       Gen.Body
       Gen.Common
+      Gen.Education
       Gen.Gen
       Gen.Skills
       Gen.Work

@@ -1,7 +1,7 @@
 {-# LANGUAGE RecordWildCards #-}
-module Gen.Work
- ( workExp
- )where
+{-# LANGUAGE OverloadedStrings #-}
+module Gen.Education
+ ( education )where
 
 import Data.Text (unpack,Text)
 import Gen.Common
@@ -9,27 +9,24 @@ import Info
 import Lib
 import Latex
 
-workExp :: [Experience Work] -> Latex Ltx
-workExp expirience
-   = (sle $ Slash "section*" :<@> Curl "Work Experience")
+education :: [Experience Education] -> Latex Ltx
+education expirience
+   = (sle $ Slash "section*" :<@> Curl "Education")
      :#>> (concatLtx $ map singleExp expirience)
 
-expContent :: Experience Work -> Latex Ltx
+expContent :: Experience Education -> Latex Ltx
 expContent e@Experience{..}
   = (sle $ Slash "bfseries")
   :#>> (sle $ Slash "newline")
   :#>> durationPlace
     where
       durationPlace = case duration of
-        Nothing -> (sle $ Slash "hfill" :<@> Str ( unpack $ workLocation spec) )
-        Just (Duration s Nothing) ->
-          (sle $ Str (unpack s <> " $\\Rightarrow$ " <> "present" ) )
+        Nothing -> (sle $ Slash "hfill" :<@> Str ( show $ cgpa spec) )
+        Just (Duration s Nothing) -> l (unpack s) "present" (cgpa spec)
+        Just (Duration s (Just e)) -> l (unpack s) (unpack e) (cgpa spec)
+      l start end c = (sle $ Str (start <> " $\\Rightarrow$ " <> end ) )
           :#>> (sle $ Slash "hfill")
-          :#>> (sle $ Str $ unpack $ workLocation spec)
-        Just (Duration s (Just end)) ->
-          (sle $ Str (unpack s <> " $\\Rightarrow$ " <> unpack end))
-          :#>> (sle $ Slash "hfill")
-          :#>> (sle $ Str $ unpack $ workLocation spec)
+          :#>> (sle $ Str ("cgpa: " <> (show c)))
 
 achievementsList :: [Text] -> Latex Ltx
 achievementsList l
@@ -41,24 +38,24 @@ achievementsList l
     where
       toItem x = sle $ Slash $ "item " <> unpack x
 
-singleExp :: Experience Work -> Latex Ltx
+singleExp :: Experience Education -> Latex Ltx
 singleExp e@Experience{..}
-  = (sle $ Str $ "% begin exp" <> (unpack $ workPlaceName spec))
+  = (sle $ Str $ "% begin edu" <> (unpack $ universityName spec))
         :#>> LX (Opn (DefineColor "DarkBlue" (0.0,0.0,0.3)))
         :#>> (sle $ Slash "Large")
-        -- position
+        -- degree name
         :#>> (sle $ Slash "color" :<@> Curl "DarkBlue")
-        :#>> (sle $ Slash "textbf" :<@> (Curl $ unpack $ position spec))
+        :#>> (sle $ Slash "textbf" :<@> (Curl $ unpack $ degreeName spec))
         :#>> (sle $ Slash "vspace" :<@> Curl "0.1cm")
         :#>> (sle $ Slash "newline")
 
-        -- work place name
+        -- university name
         :#>> (sle $ Slash "color" :<@> Curl "darkgray")
         :#>> (sle $ Slash "large")
-        :#>> (sle $ Str $ unpack $ workPlaceName spec)
+        :#>> (sle $ Str $ unpack $ universityName spec <> " " <> universityPlace spec)
         :#>> (sle $ Slash "normalsize")
 
-        -- duration and place
+        -- duration and cgpa
         :#>> (Cld (InCurl (Str "textcolor" :<@> Curl "gray"))
                 :<^> (Cld (BegEnd "slshape" ELine) ) :<&> (expContent e)
                 )
@@ -66,5 +63,4 @@ singleExp e@Experience{..}
         -- achievements
         :#>> (sle $ Slash "color" :<@> Curl "Black")
         :#>> (achievementsList achievements)
-        :#>> (sle $ Slash "vspace" :<@> Curl "0.3cm")
-        :#>> (sle $ Str $ "% end exp" <> (unpack $ position spec))
+        :#>> (sle $ Str $ "% end edu" <> (unpack $ universityPlace spec))

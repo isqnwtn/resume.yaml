@@ -46,8 +46,16 @@ education:
     - spec:
         universityName: "IIT"
         universityPlace: "Hell"
+        degreeName: Bachelor of Fights
+        cgpa: 6.9
+      duration:
+        startDate: Aug-2016
+        endDate: Apr-2020
       achievements:
         - "ruined mental health"
+        - "spent 4 years doing nothing"
+        - "tried a few things and failed"
+        - "honestly quite done with life after this"
 skills:
     - animus @ 3
     - fighting @ 5

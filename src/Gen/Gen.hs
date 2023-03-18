@@ -20,6 +20,7 @@ someFunc resume@Resume{..} = do
         :#>> pkg ["svgnames","table"] "xcolor"
         :#>> pkg [] "tabularx"
         :#>> pkg [] "tikz"
+        :#>> pkg [] "hyperref"
         :#>> body
   let lns = map render li
   return $ unlines lns
