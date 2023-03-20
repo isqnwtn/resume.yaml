@@ -29,6 +29,7 @@ library
       Gen.Common
       Gen.Education
       Gen.Gen
+      Gen.Projects
       Gen.Skills
       Gen.Work
       Info

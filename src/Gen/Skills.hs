@@ -41,8 +41,13 @@ renderSkills sk
        )
   :#>> (sle $ Slash "normalsize")
     where
+      maxLevel = maximum $ map snd sk
       renderOne (name,level)
         = (sle $ Str (unpack name))
           :#>> (sle $ Str "&")
-          :#>> (sle $ Str $ concat $ replicate level "$\\star$")
+          :#>> (sle $ Str $ concat $
+               (replicate (maxLevel - level) "\\faStar[regular]")
+               <>
+                (replicate level "\\faStar")
+               )
           :#>> (sle $ Slash "\\")

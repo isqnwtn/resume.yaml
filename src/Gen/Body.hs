@@ -9,6 +9,7 @@ import Gen.Common
 import Gen.Work
 import Gen.Skills
 import Gen.Education
+import Gen.Projects
 import Latex
 import Info
 import Lib
@@ -19,6 +20,9 @@ resumeBody Resume{..} =
   let left = (workExp workExperience)
        :#>> (education educationInfo)
       right = renderSkills skills
+       :#>> (sle $ Slash "newline")
+       :#>> (sle $ Slash "vspace" :<@> Curl "1cm")
+       :#>> (projectSection projects)
   in table (1.0,1.0) "white" (left >&< right)
 
 
@@ -56,7 +60,7 @@ personalInfoBox PersonalInfo{..} =
       infoBox icon info = sle $ (Slash "faIcon") :<@> (Curl icon) :<@> (Str $ " " <> unpack info)
       infoRow1 = (infoBox "envelope" email) >&< (infoBox "phone" phoneNum)
       infoRow2 = (infoBox "map-marker-alt" location) >&< (infoBox "globe"  website)
-      infoRow3 = (infoBox "github" github) >&< (infoBox "pen" $ pack "")
+      infoRow3 = (infoBox "github" github) >&< (infoBox "linkedin" $ pack "")
       noindent = sle $ Slash "noindent"
       minipage
         = (Cld (MiniPage (Curl "1.0\\textwidth")))

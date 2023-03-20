@@ -1,7 +1,7 @@
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE OverloadedStrings #-}
-module Gen.Education
- ( education )where
+module Gen.Projects
+ ( projectSection )where
 
 import Data.Text (unpack,Text)
 import Gen.Common
@@ -9,24 +9,20 @@ import Info
 import Lib
 import Latex
 
-education :: [Experience Education] -> Latex Ltx
-education expirience
-   = (sle $ Slash "section*" :<@> Curl "Education")
+projectSection :: [Experience Project] -> Latex Ltx
+projectSection expirience
+   = (sle $ Slash "section*" :<@> Curl "Projects")
      :#>> (concatLtx $ map singleExp expirience)
 
-expContent :: Experience Education -> Latex Ltx
-expContent e@Experience{..}
+expContent :: Experience Project -> Latex Ltx
+expContent Experience{..}
   = (sle $ Slash "bfseries")
   :#>> (sle $ Slash "newline")
-  :#>> durationPlace
+  :#>> (l (unpack $ projectLanguage spec) (unpack $ projectRepo spec))
     where
-      durationPlace = case duration of
-        Nothing -> (sle $ Slash "hfill" :<@> Str ( show $ cgpa spec) )
-        Just (Duration s Nothing) -> l (unpack s) "present" (cgpa spec)
-        Just (Duration s (Just e)) -> l (unpack s) (unpack e) (cgpa spec)
-      l start end c = (sle $ Str (start <> " $\\Rightarrow$ " <> end ) )
+      l lang repo = (sle $ Str $ "language: " <> lang )
           :#>> (sle $ Slash "hfill")
-          :#>> (sle $ Str ("cgpa: " <> (show c)))
+          :#>> (sle $ Str ("repo: " <> repo))
 
 achievementsList :: [Text] -> Latex Ltx
 achievementsList l
@@ -36,21 +32,21 @@ achievementsList l
     where
       toItem x = sle $ Slash $ "item " <> unpack x
 
-singleExp :: Experience Education -> Latex Ltx
+singleExp :: Experience Project -> Latex Ltx
 singleExp e@Experience{..}
-  = (sle $ Str $ "% begin edu" <> (unpack $ universityName spec))
+  = (sle $ Str $ "% begin edu" <> (unpack $ projectName spec))
         :#>> LX (Opn (DefineColor "DarkBlue" (0.0,0.0,0.3)))
         :#>> (sle $ Slash "Large")
         -- degree name
         :#>> (sle $ Slash "color" :<@> Curl "DarkBlue")
-        :#>> (sle $ Slash "textbf" :<@> (Curl $ unpack $ degreeName spec))
+        :#>> (sle $ Slash "textbf" :<@> (Curl $ unpack $ projectName spec))
         :#>> (sle $ Slash "vspace" :<@> Curl "0.1cm")
         :#>> (sle $ Slash "newline")
 
         -- university name
         :#>> (sle $ Slash "color" :<@> Curl "darkgray")
         :#>> (sle $ Slash "large")
-        :#>> (sle $ Str $ unpack $ universityName spec <> " " <> universityPlace spec)
+        :#>> (sle $ Str $ unpack $ "category: " <> projectCategory spec)
         :#>> (sle $ Slash "normalsize")
 
         -- duration and cgpa
@@ -61,4 +57,5 @@ singleExp e@Experience{..}
         -- achievements
         :#>> (sle $ Slash "color" :<@> Curl "Black")
         :#>> (achievementsList achievements)
-        :#>> (sle $ Str $ "% end edu" <> (unpack $ universityPlace spec))
+        :#>> (sle $ Slash "vspace" :<@> Curl "0.4cm")
+        :#>> (sle $ Str $ "% end edu" <> (unpack $ projectName spec))

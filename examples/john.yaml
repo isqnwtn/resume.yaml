@@ -45,8 +45,21 @@ projects:
     - spec:
         projectName: "Resumeow"
         projectLanguage: "Haskell"
+        projectCategory: "Parsing"
+        projectRepo: "isqnwtn/resumeow"
       achievements:
       - "this project lmao"
+      - "hasnt used any other external libraries"
+      - "took a lot of time to make, idk if this was worth it lmao"
+    - spec:
+        projectName: "HXX"
+        projectLanguage: "Haskell"
+        projectCategory: "machine Learning"
+        projectRepo: "isqnwtn/hxx"
+      achievements:
+      - "implemented a type-safe machine learning library in haskell"
+      - "computations done using accelerate to export into gpu"
+      - "idk this is a dream lmao"
 education:
     - spec:
         universityName: "IIT"

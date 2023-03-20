@@ -19,6 +19,7 @@ someFunc resume@Resume{..} = do
         :#>> pkg ["legalpaper","margin=0in"] "geometry"
         :#>> pkg ["svgnames","table"] "xcolor"
         :#>> pkg [] "tabularx"
+        :#>> pkg [] "pgf-pie"
         :#>> pkg [] "tikz"
         :#>> pkg [] "hyperref"
         :#>> pkg [] "fontawesome5"

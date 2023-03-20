@@ -95,5 +95,7 @@ instance FromJSON Education
 data Project = Project
   { projectName :: Text
   , projectLanguage :: Text
+  , projectCategory :: Text
+  , projectRepo :: Text
   } deriving (Show, Generic)
 instance FromJSON Project
