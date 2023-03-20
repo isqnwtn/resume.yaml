@@ -12,14 +12,14 @@ import Gen.Education
 import Latex
 import Info
 import Lib
-import Data.Text (unpack)
+import Data.Text (unpack,pack)
 
 resumeBody :: Resume -> Latex Ltx
 resumeBody Resume{..} =
   let left = (workExp workExperience)
        :#>> (education educationInfo)
       right = renderSkills skills
-  in table (1.0,1.0) "white" left right
+  in table (1.0,1.0) "white" (left >&< right)
 
 
 header :: PersonalInfo -> Latex Ltx
@@ -42,7 +42,7 @@ header pInfo@PersonalInfo{..} =
       minipage
         = (Cld (MiniPage (Curl "1.0\\textwidth")))
         :<&> (   (sle $ Slash "vspace" :<@> Curl "0.5cm" )
-            :#>> table (0.25,1.75) "lightBlue" left right
+            :#>> table (0.25,1.75) "lightBlue" (left >&< right)
             -- :#>> (sle $ Slash "rule" :<@> Curl "\\linewidth" :<@> Curl "4pt")
             :#>> (sle $ Slash "vspace" :<@> Curl "0.1cm")
             )
@@ -53,19 +53,15 @@ header pInfo@PersonalInfo{..} =
 personalInfoBox :: PersonalInfo -> Latex Ltx
 personalInfoBox PersonalInfo{..} =
   let defcol = LX (Opn (DefineColor "kindaDarkBlue" (0.8,0.8,1.0)))
-      infoBox info = (sle $ Str $ unpack info)
-                   :#>> (sle $ Slash "newline")
-                   :#>> (sle $ Slash "vspace" :<@> Curl "0.1cm")
-      left = infoBox email
-           :#>> infoBox location
-           :#>> infoBox github
-      right =  infoBox phoneNum
-           :#>> infoBox website
+      infoBox icon info = sle $ (Slash "faIcon") :<@> (Curl icon) :<@> (Str $ " " <> unpack info)
+      infoRow1 = (infoBox "envelope" email) >&< (infoBox "phone" phoneNum)
+      infoRow2 = (infoBox "map-marker-alt" location) >&< (infoBox "globe"  website)
+      infoRow3 = (infoBox "github" github) >&< (infoBox "pen" $ pack "")
       noindent = sle $ Slash "noindent"
       minipage
         = (Cld (MiniPage (Curl "1.0\\textwidth")))
         :<&> (   (sle $ Slash "vspace" :<@> Curl "0.2cm" )
-            :#>> table (1.0,1.0) "kindaDarkBlue" left right
+            :#>> table (1.0,1.0) "kindaDarkBlue" (infoRow1 <//> infoRow2 <//> infoRow3)
             -- :#>> (sle $ Slash "rule" :<@> Curl "\\linewidth" :<@> Curl "4pt")
             :#>> (sle $ Slash "vspace" :<@> Curl "0.2cm")
             )

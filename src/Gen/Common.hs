@@ -23,12 +23,10 @@ concatLtx [] = Empty
 -- | Generate a table with predifined size
 table :: (Float,Float) -- | table size
       -> String    -- | color
-      -> Latex Ltx -- | left content of table
-      -> Latex Ltx -- | right content of table
+      -> Latex Ltx -- | body
       -> Latex Ltx
-table (lhs,rhs) color leftLtx rightLtx=
+table (lhs,rhs) color body=
   let tab = ( Cld $ Tabularx $ Curl "\\linewidth" :<@> tabattr ) :<&> body
-      body = leftLtx :#>> (sle $ Str "&") :#>> rightLtx
       tabhsize :: Float -> String
       tabhsize x = render $ Curl $ render $ Slash "hsize" :<@> Str ("="<>show x) :<@> Slash "hsize"
 
@@ -39,3 +37,10 @@ table (lhs,rhs) color leftLtx rightLtx=
       arrayrulecolor = sle $ Slash "arrayrulecolor" :<@> Curl color
       noindent = sle $ Slash "noindent"
   in (noindent :#>> lenset :#>> arrayrulecolor :#>> tab)
+
+
+(>&<) :: Latex Ltx -> Latex Ltx -> Latex Ltx
+left >&< right = left :#>> (sle $ Str "&") :#>> right
+
+(<//>) :: Latex Ltx -> Latex Ltx -> Latex Ltx
+up <//> down = up :#>> (sle $ Slash "\\") :#>> down

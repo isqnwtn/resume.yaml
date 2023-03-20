@@ -21,6 +21,7 @@ someFunc resume@Resume{..} = do
         :#>> pkg [] "tabularx"
         :#>> pkg [] "tikz"
         :#>> pkg [] "hyperref"
+        :#>> pkg [] "fontawesome5"
         :#>> body
   let lns = map render li
   return $ unlines lns

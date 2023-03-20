@@ -33,11 +33,9 @@ expContent e@Experience{..}
 
 achievementsList :: [Text] -> Latex Ltx
 achievementsList l
-  = (Cld (BegEnd "itshape" ELine) :<&>
-     ( Cld (BegEnd "itemize" ELine) :<&>
+  = ( Cld (BegEnd "itemize" ELine) :<&>
      ( concatLtx $ map toItem l)
      )
-    )
     where
       toItem x = sle $ Slash $ "item " <> unpack x
 
