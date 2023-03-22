@@ -17,7 +17,7 @@ data Ltx where
   Cld :: LtxModCld -> Ltx
 
 data LtxModOpn
-  = DocClass String
+  = DocClass[String] String
   | Package [String] String
   | DefineColor String (Float,Float,Float)
   -- the following is for adhoc use cases
@@ -32,7 +32,7 @@ data LtxModCld
   | BegEnd   String (Line String) -- latex elements enclosed inside begin{stuff} end{stuff} format
 
 instance Linable Ltx where
-  linn (Opn (DocClass x)) = Slash "documentclass" :<@> Curl x
+  linn (Opn (DocClass attr x)) = Slash "documentclass" :<@> Square (intercalate "," attr) :<@> Curl x
   linn (Opn (Package attr pkg)) =
     if (not . null) attr then
       Slash "usepackage"

@@ -16,11 +16,10 @@ projectSection expirience
 
 expContent :: Experience Project -> Latex Ltx
 expContent Experience{..}
-  = (sle $ Slash "bfseries")
-  :#>> (sle $ Slash "newline")
+  = (sle $ Slash "newline")
   :#>> (l (unpack $ projectLanguage spec) (unpack $ projectRepo spec))
     where
-      l lang repo = (sle $ Str $ "language: " <> lang )
+      l lang repo = (sle $ Str $ lang )
           :#>> (sle $ Slash "hfill")
           :#>> (sle $ Str ("repo: " <> repo))
 
@@ -56,6 +55,7 @@ singleExp e@Experience{..}
 
         -- achievements
         :#>> (sle $ Slash "color" :<@> Curl "Black")
+        :#>> (sle $ Slash "upshape")
         :#>> (achievementsList achievements)
         :#>> (sle $ Slash "vspace" :<@> Curl "0.4cm")
         :#>> (sle $ Str $ "% end edu" <> (unpack $ projectName spec))
