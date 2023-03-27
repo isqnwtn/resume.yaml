@@ -11,7 +11,7 @@ import Latex
 
 workExp :: [Experience Work] -> Latex Ltx
 workExp expirience
-   = (sle $ Slash "section*" :<@> Curl "Work Experience")
+   = (sle $ Slash "section*" :<@> Curl "WORK EXPERIENCE")
      :#>> (concatLtx $ map singleExp expirience)
 
 expContent :: Experience Work -> Latex Ltx

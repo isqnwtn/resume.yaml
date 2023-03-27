@@ -43,6 +43,7 @@ data PersonalInfo = PersonalInfo
   { name :: Text
   , title :: Text
   , description :: Text
+  , photo :: Maybe Text
 
   , phoneNum :: Text
   , email :: Text

@@ -11,7 +11,7 @@ import Latex
 
 education :: [Experience Education] -> Latex Ltx
 education expirience
-   = (sle $ Slash "section*" :<@> Curl "Education")
+   = (sle $ Slash "section*" :<@> Curl "EDUCATION")
      :#>> (concatLtx $ map singleExp expirience)
 
 expContent :: Experience Education -> Latex Ltx

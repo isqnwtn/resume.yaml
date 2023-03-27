@@ -30,7 +30,14 @@ header :: PersonalInfo -> Latex Ltx
 header pInfo@PersonalInfo{..} =
   let defcol = LX (Opn (DefineColor "lightBlue" (0.9,0.9,1.0)))
       noindent = sle $ Slash "noindent"
-      left = sle $ Str ""
+      raisebox ltx = Cld (InCurl (Str "raisebox" :<@> Curl "-\\totalheight")) :<^> ltx
+      putPhoto path = sle $ Slash "includegraphics"
+                             :<@> (Square $ "width=3.5cm,height=3.5cm")
+                             :<@> (Curl $ unpack path)
+      left = case photo of
+        Nothing -> sle $ Str ""
+        Just path -> (sle $ Slash "vspace" :<@> Curl "-1cm")
+          :#>> (raisebox $ putPhoto path)
       right = (sle $ Slash "Huge")
             :#>> (sle $ Str $ unpack name)
             :#>> (sle $ Slash "vspace" :<@> Curl "0.2cm")
@@ -46,7 +53,7 @@ header pInfo@PersonalInfo{..} =
       minipage
         = (Cld (MiniPage (Curl "1.0\\textwidth")))
         :<&> (   (sle $ Slash "vspace" :<@> Curl "0.5cm" )
-            :#>> table (0.25,1.75) "lightBlue" (left >&< right)
+            :#>> table (0.40,1.60) "lightBlue" (left >&< right)
             -- :#>> (sle $ Slash "rule" :<@> Curl "\\linewidth" :<@> Curl "4pt")
             :#>> (sle $ Slash "vspace" :<@> Curl "0.1cm")
             )

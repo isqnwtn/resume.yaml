@@ -12,7 +12,7 @@ import Latex
 
 renderSkillsPie :: [(Text,Int)] -> Latex Ltx
 renderSkillsPie sk
-  = (sle $ Slash "section*" :<@> Curl "Skills")
+  = (sle $ Slash "section*" :<@> Curl "SKILLS")
   :#>> ( Cld (BegEnd "tikzpicture" ELine) :<&>
          ( Cld (InCurl (Str "pie"))
            :<^> (
@@ -33,8 +33,8 @@ renderSkillPie (skill,amt)
 
 renderSkills :: [(Text,Int)] -> Latex Ltx
 renderSkills sk
- = (sle $ Slash "section*" :<@> Curl "Skills")
-  :#>> (sle $ Slash "Large")
+ = (sle $ Slash "section*" :<@> Curl "SKILLS")
+  :#>> (sle $ Slash "large")
   :#>> (sle $ Slash "bfseries")
   :#>> ( Cld (BegEnd "tabular" (Curl "l r")) :<&>
           (concatLtx $ (map renderOne sk))

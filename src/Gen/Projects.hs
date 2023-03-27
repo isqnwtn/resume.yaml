@@ -11,7 +11,7 @@ import Latex
 
 projectSection :: [Experience Project] -> Latex Ltx
 projectSection expirience
-   = (sle $ Slash "section*" :<@> Curl "Projects")
+   = (sle $ Slash "section*" :<@> Curl "PROJECTS")
      :#>> (concatLtx $ map singleExp expirience)
 
 expContent :: Experience Project -> Latex Ltx

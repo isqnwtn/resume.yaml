@@ -26,6 +26,9 @@ someFunc resume@Resume{..} = do
 
         -- latex by default uses seriff font, we will change it for sans as a part of making resume
         :#>> (sle $ Slash "renewcommand" :<@> Curl "\\familydefault" :<@> Curl "\\sfdefault")
+
+        -- add image folder
+        :#>> (sle $ Slash "graphicspath" :<@> Curl "{./images/}")
         :#>> body
   let lns = map render li
   return $ unlines lns
