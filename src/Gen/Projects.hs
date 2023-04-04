@@ -55,7 +55,6 @@ singleExp e@Experience{..}
 
         -- achievements
         :#>> (sle $ Slash "color" :<@> Curl "Black")
-        :#>> (sle $ Slash "upshape")
         :#>> (achievementsList achievements)
         :#>> (sle $ Slash "vspace" :<@> Curl "0.4cm")
         :#>> (sle $ Str $ "% end edu" <> (unpack $ projectName spec))

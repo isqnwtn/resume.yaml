@@ -35,7 +35,6 @@ renderSkills :: [(Text,Int)] -> Latex Ltx
 renderSkills sk
  = (sle $ Slash "section*" :<@> Curl "SKILLS")
   :#>> (sle $ Slash "large")
-  :#>> (sle $ Slash "bfseries")
   :#>> ( Cld (BegEnd "tabular" (Curl "l r l r")) :<&>
           (concatLtx $ (map renderTwo $ splitAndZip (Just <$> sk) Nothing))
        )
@@ -44,13 +43,13 @@ renderSkills sk
       maxLevel = 5
       createStars empty full = (replicate empty "\\faStar[regular]") <> (replicate full "\\faStar")
       renderOneSkill (Just (name,level))
-        = (sle $ Str (unpack name))
-          :#>> (sle $ Str "&")
-          :#>> (sle $ Str $ concat $ createStars (maxLevel - level) level)
+        = (sle $ Slash "textbf" :<@> Curl (unpack name))
+          >&<
+          (sle $ Str $ concat $ createStars (maxLevel - level) level)
       renderOneSkill Nothing
-        = (sle $ Str "") :#>> (sle $ Str "&") :#>> (sle $ Str "")
+        = (sle $ Str "") >&< (sle $ Str "")
       renderTwo (s1,s2) =
-        (renderOneSkill s1) :#>> (sle $ Str "&") :#>> (renderOneSkill s2) :#>> (sle $ Slash "\\")
+        (renderOneSkill s1) >&< (renderOneSkill s2) :#>> (sle $ Slash "\\")
 
 splitAndZip :: [a] -> a -> [(a,a)]
 splitAndZip list extraElem  = if listlen `mod` 2 == 0

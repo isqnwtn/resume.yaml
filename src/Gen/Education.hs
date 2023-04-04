@@ -36,6 +36,9 @@ achievementsList l
     where
       toItem x = sle $ Slash $ "item " <> unpack x
 
+multiCol :: Int -> Latex Ltx -> Latex Ltx
+multiCol cols body = Cld (BegEnd "multicols" $ Curl $ show cols) :<&> body
+
 singleExp :: Experience Education -> Latex Ltx
 singleExp e@Experience{..}
   = (sle $ Str $ "% begin edu" <> (unpack $ universityName spec))
@@ -60,5 +63,5 @@ singleExp e@Experience{..}
 
         -- achievements
         :#>> (sle $ Slash "color" :<@> Curl "Black")
-        :#>> (achievementsList achievements)
+        :#>> (multiCol 2 $ achievementsList achievements)
         :#>> (sle $ Str $ "% end edu" <> (unpack $ universityPlace spec))

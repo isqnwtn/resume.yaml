@@ -35,9 +35,11 @@ instance FromJSON Resume where
     sk <- v .: "skills"
     return $ Resume pI wE prj edu (convertSkills sk)
       where
-        splitIt s = (\x -> ( pack $ head x, read $ head $ tail x)) (splitOn "@" s)
         convertSkills ls = map splitIt ls
   parseJSON _ = mempty
+
+splitIt :: Read a => String -> (Text,a)
+splitIt s = (\x -> ( pack $ head x, read $ head $ tail x)) (splitOn "@" s)
 
 data PersonalInfo = PersonalInfo
   { name :: Text
@@ -50,6 +52,7 @@ data PersonalInfo = PersonalInfo
   , location :: Text
   , website :: Text
   , github :: Text
+  , linkedIn :: Text
   } deriving (Show, Generic)
 
 instance FromJSON PersonalInfo

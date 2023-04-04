@@ -9,7 +9,6 @@ import Gen.Body
 import Latex
 import Info
 import Lib
-import Data.Text (unpack)
 
 someFunc :: Resume -> IO String
 someFunc resume@Resume{..} = do
@@ -23,6 +22,8 @@ someFunc resume@Resume{..} = do
         :#>> pkg [] "tikz"
         :#>> pkg [] "hyperref"
         :#>> pkg [] "fontawesome5"
+        :#>> pkg [] "multicol"
+        :#>> pkg ["none"] "hyphenat"
 
         -- latex by default uses seriff font, we will change it for sans as a part of making resume
         :#>> (sle $ Slash "renewcommand" :<@> Curl "\\familydefault" :<@> Curl "\\sfdefault")
