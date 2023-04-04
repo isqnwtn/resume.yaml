@@ -32,7 +32,7 @@ header pInfo@PersonalInfo{..} =
       noindent = sle $ Slash "noindent"
       raisebox ltx = Cld (InCurl (Str "raisebox" :<@> Curl "-\\totalheight")) :<^> ltx
       putPhoto path = sle $ Slash "includegraphics"
-                             :<@> (Square $ "width=3.5cm,height=3.5cm")
+                             :<@> (Square $ "width=3cm,height=3cm")
                              :<@> (Curl $ unpack path)
       left = case photo of
         Nothing -> sle $ Str ""
@@ -53,7 +53,7 @@ header pInfo@PersonalInfo{..} =
       minipage
         = (Cld (MiniPage (Curl "1.0\\textwidth")))
         :<&> (   (sle $ Slash "vspace" :<@> Curl "0.5cm" )
-            :#>> table (0.40,1.60) "lightBlue" (left >&< right)
+            :#>> table (0.30,1.7) "lightBlue" (left >&< right)
             -- :#>> (sle $ Slash "rule" :<@> Curl "\\linewidth" :<@> Curl "4pt")
             :#>> (sle $ Slash "vspace" :<@> Curl "0.1cm")
             )
