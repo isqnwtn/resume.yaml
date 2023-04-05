@@ -10,11 +10,12 @@ module Info
   , Work(..)
   , Education(..)
   , Project(..)
+  , URL(..)
   )
 where
 
-import Data.Text (Text,pack)
-import Data.List.Split
+import Data.Text (Text,pack,splitOn)
+import qualified Data.List.Split as S
 import Data.Yaml
 import GHC.Generics
 
@@ -39,7 +40,20 @@ instance FromJSON Resume where
   parseJSON _ = mempty
 
 splitIt :: Read a => String -> (Text,a)
-splitIt s = (\x -> ( pack $ head x, read $ head $ tail x)) (splitOn "@" s)
+splitIt s = (\x -> ( pack $ head x, read $ head $ tail x)) (S.splitOn "@" s)
+
+data URL = URL{
+   urlName :: Text
+  ,urlLink :: Text
+              } deriving(Show,Generic)
+instance FromJSON URL where
+  parseJSON (String x) = return $ URL name link
+    where
+      (name,link) = splitA x
+  parseJSON _ = mempty
+
+splitA :: Text -> (Text,Text)
+splitA s = (\x -> (head x,head $ tail x)) (splitOn (pack "@") s)
 
 data PersonalInfo = PersonalInfo
   { name :: Text
@@ -50,9 +64,9 @@ data PersonalInfo = PersonalInfo
   , phoneNum :: Text
   , email :: Text
   , location :: Text
-  , website :: Text
-  , github :: Text
-  , linkedIn :: Text
+  , website :: URL
+  , github :: URL
+  , linkedIn :: URL
   } deriving (Show, Generic)
 
 instance FromJSON PersonalInfo
@@ -100,6 +114,6 @@ data Project = Project
   { projectName :: Text
   , projectLanguage :: Text
   , projectCategory :: Text
-  , projectRepo :: Text
+  , projectRepo :: URL
   } deriving (Show, Generic)
 instance FromJSON Project

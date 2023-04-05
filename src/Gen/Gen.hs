@@ -20,7 +20,7 @@ someFunc resume@Resume{..} = do
         :#>> pkg [] "tabularx"
         :#>> pkg [] "pgf-pie"
         :#>> pkg [] "tikz"
-        :#>> pkg [] "hyperref"
+        :#>> pkg ["hidelinks"] "hyperref"
         :#>> pkg [] "fontawesome5"
         :#>> pkg [] "multicol"
         :#>> pkg ["none"] "hyphenat"

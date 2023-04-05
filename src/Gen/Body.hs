@@ -65,9 +65,11 @@ personalInfoBox :: PersonalInfo -> Latex Ltx
 personalInfoBox PersonalInfo{..} =
   let defcol = LX (Opn (DefineColor "kindaDarkBlue" (0.8,0.8,1.0)))
       infoBox icon info = sle $ (Slash "faIcon") :<@> (Curl icon) :<@> (Str $ " " <> unpack info)
+      infoBoxUrl icon info = sle $ (Slash "faIcon") :<@> (Curl icon) :<@> (Str $ " ")
+                            :<@> (Slash "href" :<@> Curl (unpack $ urlLink info) :<@> Curl (unpack $ urlName info))
       infoRow1 = (infoBox "envelope" email) >&< (infoBox "phone" phoneNum)
-      infoRow2 = (infoBox "map-marker-alt" location) >&< (infoBox "globe"  website)
-      infoRow3 = (infoBox "github" github) >&< (infoBox "linkedin" $ linkedIn)
+      infoRow2 = (infoBox "map-marker-alt" location) >&< (infoBoxUrl "globe" website)
+      infoRow3 = (infoBoxUrl "github" github) >&< (infoBoxUrl "linkedin" linkedIn)
       noindent = sle $ Slash "noindent"
       minipage
         = (Cld (MiniPage (Curl "1.0\\textwidth")))

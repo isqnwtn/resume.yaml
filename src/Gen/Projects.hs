@@ -17,11 +17,11 @@ projectSection expirience
 expContent :: Experience Project -> Latex Ltx
 expContent Experience{..}
   = (sle $ Slash "newline")
-  :#>> (l (unpack $ projectLanguage spec) (unpack $ projectRepo spec))
+  :#>> (l (unpack $ projectLanguage spec) (projectRepo spec))
     where
       l lang repo = (sle $ Str $ lang )
           :#>> (sle $ Slash "hfill")
-          :#>> (sle $ Str ("repo: " <> repo))
+          :#>> (sle $ Slash "href" :<@> Curl (unpack $ urlLink repo) :<@> Curl (unpack $ urlName repo))
 
 achievementsList :: [Text] -> Latex Ltx
 achievementsList l
