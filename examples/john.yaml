@@ -5,20 +5,22 @@ personalInfo:
     phoneNum: "+123-420-69"
     email: "john@doe.com"
     location: "mars"
-    website: "www.john.doe"
-    github: "github/joooohn"
+    website: "www.john.doe @ www.john.doe"
+    github: "github/joooohn @ http://github.com/jooooohndoeeee"
+    linkedIn: "john doe @ http://www.linkedin.com/john"
+    photo: "photo"
 workExperience:
     - spec:
         workPlaceName: Abstergo Industries
         workLocation: Earth
-        position: Senior History Mainpulator
+        position: Senior software developer
       duration:
         startDate: "Feb-2022"
         endDate: "March-2022"
       achievements:
-        - "examined timelines to look into life of assassins"
-        - "altered timeslines to produce different effectss"
-        - "discovered city of atlantis"
+        - "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+        - "Maecenas non nunc vitae massa hendrerit luctus id ut ex."
+        - "Nam accumsan odio eu facilisis maximus."
     - spec:
         workPlaceName: Aperture Science Incorporated
         workLocation: Valve
@@ -27,9 +29,9 @@ workExperience:
         startDate: "Jan-2021"
         endDate: "Jan-2022"
       achievements:
-        - "did testing with apperture laborotory environment"
-        - "tested and verified working of portal gun"
-        - "made a portal in the moon"
+        - "Suspendisse aliquet nulla eget nulla dignissim feugiat"
+        - "Donec vitae turpis nec mi dignissim venenatis."
+        - "Nam mattis odio et nisl volutpat ultricies."
     - spec:
         workPlaceName: Umbrella corporation
         workLocation: Hell
@@ -38,15 +40,15 @@ workExperience:
         startDate: "April-2019"
         endDate: "April-2019"
       achievements:
-        - "observed behaviour of mutants under different conditions, as well as monitoring and noting the differences along side the introduction of different chemicals"
-        - "discovered serums that convert people into mutants"
-        - "didn't die"
+        - "Nam mattis odio et nisl volutpat ultricies."
+        - "Donec ac ligula et nisi sollicitudin eleifend."
+        - "Ut in arcu non ipsum dignissim lacinia sed tincidunt risus."
 projects:
     - spec:
         projectName: "Resumeow"
         projectLanguage: "Haskell"
         projectCategory: "Parsing"
-        projectRepo: "isqnwtn/resumeow"
+        projectRepo: "john/hiareco @ url"
       achievements:
       - "this project lmao"
       - "hasnt used any other external libraries"
@@ -55,11 +57,20 @@ projects:
         projectName: "HXX"
         projectLanguage: "Haskell"
         projectCategory: "machine Learning"
-        projectRepo: "isqnwtn/hxx"
+        projectRepo: "john/hxx @ url"
       achievements:
-      - "implemented a type-safe machine learning library in haskell"
-      - "computations done using accelerate to export into gpu"
-      - "idk this is a dream lmao"
+      - "Sed nec tellus nec urna varius dapibus commodo ut tellus."
+      - "Etiam sollicitudin mauris et dignissim sodales."
+      - "Quisque auctor ante a egestas facilisis."
+    - spec:
+        projectName: "Spiking neural network"
+        projectLanguage: "Rust"
+        projectCategory: "machine Learning"
+        projectRepo: "john/snn @ url"
+      achievements:
+      - "Sed nec tellus nec urna varius dapibus commodo ut tellus."
+      - "Etiam sollicitudin mauris et dignissim sodales."
+      - "Quisque auctor ante a egestas facilisis."
 education:
     - spec:
         universityName: "IIT"
@@ -70,12 +81,18 @@ education:
         startDate: Aug-2016
         endDate: Apr-2020
       achievements:
-        - "ruined mental health"
-        - "spent 4 years doing nothing"
-        - "tried a few things and failed"
-        - "honestly quite done with life after this"
+        - "course: course1"
+        - "course: course2"
+        - "course: course3"
+        - "project: project1"
+        - "project: project2"
+        - "project: project3"
 skills:
     - animus @ 3
     - fighting @ 5
     - chemicals @ 4
     - being alive @ 1
+    - coding @ 2
+    - reflexes @ 4
+    - gaming @ 5
+    - sports @ 4
